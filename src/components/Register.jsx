@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import axios from "axios";
-import { showSuccessToast, showErrorToast } from "../utils/Toaster"; // path adjust karein agar Toast.jsx kisi aur folder me ho
+import { showSuccessToast, showErrorToast } from "../utils/Toaster";
+import axiosInstance from "../api/axiosInstance"; // axios instance import
 
 function Register() {
   const [register, setRegister] = useState({
@@ -8,25 +8,34 @@ function Register() {
     email: "",
     password: "",
   });
+  const [loading, setLoading] = useState(false); // loading state
 
   const handleChange = (e) => {
     setRegister({ ...register, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); // form reload na ho
+    e.preventDefault();
+    setLoading(true); // button disabled / pending show
+
+    console.log("Submitting register data:", register);
+
     try {
-      const response = await axios.post("http://localhost:5000/api/users/register", register); // apni API URL lagayein
+      const response = await axiosInstance.post("/users/register", register);
+
+      console.log("Response:", response.data);
 
       if (response.data.success) {
         showSuccessToast(response.data.message || "Registered successfully!");
-        setRegister({ username: "", email: "", password: "" }); // form clear
+        setRegister({ username: "", email: "", password: "" });
       } else {
         showErrorToast(response.data.message || "Registration failed!");
       }
     } catch (error) {
-      console.error(error);
+      console.error("Register error:", error);
       showErrorToast(error.response?.data?.message || "Something went wrong!");
+    } finally {
+      setLoading(false); // pending stop
     }
   };
 
@@ -35,7 +44,7 @@ function Register() {
       className="flex justify-center items-center bg-gray-100"
       style={{ minHeight: "calc(100vh - 64px)" }}
     >
-      <div className="bg-white rounded-lg shadow-lg w-96 max-w-full mx-4 p-8 mt-8 ">
+      <div className="bg-white rounded-lg shadow-lg w-96 max-w-full mx-4 p-8 mt-8">
         <h1 className="text-center text-4xl font-bold mb-6 text-gray-800">
           Sign Up
         </h1>
@@ -57,7 +66,9 @@ function Register() {
 
           {/* Email */}
           <div className="flex flex-col">
-            <label className="font-medium text-gray-700 mb-1">Email Address</label>
+            <label className="font-medium text-gray-700 mb-1">
+              Email Address
+            </label>
             <input
               type="email"
               className="bg-gray-100 rounded-lg p-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
@@ -83,21 +94,27 @@ function Register() {
             />
           </div>
 
-          {/* Button */}
+          {/* Submit Button */}
           <button
             type="submit"
-            className="bg-blue-600 text-white rounded-lg p-2 mt-2 shadow-md hover:bg-blue-700 transition duration-200"
+            disabled={loading}
+            className={`bg-blue-600 text-white rounded-lg p-2 mt-2 shadow-md transition duration-200 ${
+              loading ? "opacity-50 cursor-not-allowed" : "hover:bg-blue-700"
+            }`}
           >
-            Sign Up
+            {loading ? "Pending..." : "Sign Up"}
           </button>
         </form>
 
         <p className="text-center text-gray-700 mt-6">
           Already have an account?{" "}
-          <a href="/login" className="text-blue-600 font-medium hover:underline">
+          <a
+            href="/login"
+            className="text-blue-600 font-medium hover:underline"
+          >
             Login here
           </a>
-        </p> 
+        </p>
       </div>
     </div>
   );
