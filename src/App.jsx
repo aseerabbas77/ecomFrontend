@@ -1,10 +1,5 @@
 import React, { Suspense } from "react";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  useLocation,
-} from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./index.css";
@@ -22,20 +17,19 @@ import ErrorBoundary from "./components/ErrorBoundary.jsx";
 import PrivateRoute from "./components/PrivateRoute.jsx";
 import MyOrders from "./components/MyOrders.jsx";
 import AdminRoute from "./AdminRoute.jsx";
-import DashBoard from "./dashboard/Dashboard.jsx"; // Import Dashboard
+import DashBoard from "./dashboard/Dashboard.jsx";
 
 // Lazy load ProductDetail
 const ProductDetail = React.lazy(() =>
   import("./components/ProductDetail.jsx")
 );
 
-const AppContent = () => {
+const App = () => {
   const location = useLocation();
   const hideNavbar = location.pathname.startsWith("/dashboard");
 
   return (
     <>
-      {/* Navbar */}
       {!hideNavbar && (
         <ErrorBoundary>
           <Navbar />
@@ -54,19 +48,23 @@ const AppContent = () => {
         >
           <ErrorBoundary>
             <Routes>
-              {/* Nested routes for Dashboard */}
+              {/* Admin Dashboard */}
               <Route element={<AdminRoute />}>
                 <Route path="/dashboard/*" element={<DashBoard />} />
               </Route>
 
+              {/* Auth Routes */}
               <Route path="/register" element={<Register />} />
               <Route path="/verify-email/:token" element={<VerifyEmail />} />
               <Route path="/login" element={<Login />} />
+
+              {/* Public Routes */}
               <Route path="/" element={<ProductList />} />
               <Route path="/product/:id" element={<ProductDetail />} />
               <Route path="/checkout" element={<Checkout />} />
               <Route path="/order" element={<OrderFullFill />} />
 
+              {/* Private Routes */}
               <Route
                 path="/myorders"
                 element={
@@ -75,9 +73,6 @@ const AppContent = () => {
                   </PrivateRoute>
                 }
               />
-
-              {/* Removed: <Route path="/add" element={<AddProduct />} /> */}
-
               <Route
                 path="/cart"
                 element={
@@ -93,11 +88,5 @@ const AppContent = () => {
     </>
   );
 };
-
-const App = () => (
-  <Router>
-    <AppContent />
-  </Router>
-);
 
 export default App;
