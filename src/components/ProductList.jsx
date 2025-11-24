@@ -22,8 +22,7 @@ const ProductList = () => {
     try {
       await dispatch(addToCartAPI(product)).unwrap();
       showSuccessToast("Product added to cart!");
-      // Temporary delay so spinner is visible even on fast backend
-      await new Promise((res) => setTimeout(res, 200));
+      await new Promise((res) => setTimeout(res, 200)); // small delay for spinner
     } catch (err) {
       showErrorToast(err || "Failed to add to cart!");
     } finally {
@@ -68,7 +67,6 @@ const ProductList = () => {
           infiniteLoop
           autoPlay
           interval={5000}
-          className="carousel-container"
         >
           {carouselImages.map((image, index) => (
             <div key={index}>
@@ -112,7 +110,6 @@ const ProductList = () => {
                   key={product._id}
                   className="border rounded-lg shadow-sm hover:shadow-2xl transform hover:-translate-y-1 transition duration-300 bg-white flex flex-col justify-between"
                 >
-                  {/* Product Image */}
                   <div className="w-full h-56 sm:h-64 flex items-center justify-center bg-gray-100 rounded-t-lg overflow-hidden">
                     <img
                       src={product.imageUrl}
@@ -121,7 +118,6 @@ const ProductList = () => {
                     />
                   </div>
 
-                  {/* Product Info */}
                   <div className="flex flex-col flex-grow p-4">
                     <h3 className="text-lg font-semibold text-gray-800 text-center mb-1 truncate">
                       {product.title}
@@ -133,7 +129,6 @@ const ProductList = () => {
                       ${product.price}
                     </p>
 
-                    {/* Buttons */}
                     <div className="flex flex-col sm:flex-row justify-center gap-3 mt-auto">
                       <Link
                         to={`/product/${product._id}`}
@@ -142,6 +137,7 @@ const ProductList = () => {
                         View Details
                       </Link>
 
+                      {/* Add to Cart Button */}
                       <button
                         disabled={loadingProductId === product._id}
                         onClick={() => handleAddToCart(product)}
