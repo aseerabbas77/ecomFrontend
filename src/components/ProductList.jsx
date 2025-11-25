@@ -144,7 +144,7 @@ const ProductList = () => {
                         className={`${
                           loadingProductId === product._id
                             ? "bg-green-500 cursor-not-allowed"
-                            : "bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700"
+                            : "bg-green-500 from-green-500 to-green-600 hover:from-green-600 hover:to-green-700"
                         } text-white px-4 py-2 rounded-md w-full sm:w-auto min-w-[120px] flex items-center justify-center transition shadow-md hover:shadow-lg`}
                       >
                         {loadingProductId === product._id && (
