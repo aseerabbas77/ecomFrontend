@@ -19,7 +19,7 @@ function OrderFullFill() {
       try {
         const res = await axiosInstance.get("/address/get");
         if (res.data.addresses && res.data.addresses.length > 0) {
-          setAddress(res.data.addresses[0]);
+          setAddress(res.data.addresses[res.data.addresses.length - 1]); // latest
         }
       } catch (error) {
         toast.error("Failed to load address!");
@@ -49,8 +49,14 @@ function OrderFullFill() {
           currentAddress: address.currentAddress,
         },
         paymentMethod,
-        itemsPrice: cartItems.reduce((total, item) => total + item.product.price * item.quantity, 0),
-        totalPrice: cartItems.reduce((total, item) => total + item.product.price * item.quantity, 0),
+        itemsPrice: cartItems.reduce(
+          (total, item) => total + item.product.price * item.quantity,
+          0
+        ),
+        totalPrice: cartItems.reduce(
+          (total, item) => total + item.product.price * item.quantity,
+          0
+        ),
       };
 
       await axiosInstance.post("/orders/create", payload);
@@ -73,10 +79,18 @@ function OrderFullFill() {
       {address ? (
         <div className="bg-gray-100 p-6 rounded-lg shadow-md text-left w-96 mb-6">
           <h2 className="text-2xl font-semibold mb-3">Shipping Address</h2>
-          <p><strong>Street:</strong> {address.street}</p>
-          <p><strong>City:</strong> {address.city}</p>
-          <p><strong>District:</strong> {address.district}</p>
-          <p><strong>Current Address:</strong> {address.currentAddress}</p>
+          <p>
+            <strong>Street:</strong> {address.street}
+          </p>
+          <p>
+            <strong>City:</strong> {address.city}
+          </p>
+          <p>
+            <strong>District:</strong> {address.district}
+          </p>
+          <p>
+            <strong>Current Address:</strong> {address.currentAddress}
+          </p>
         </div>
       ) : (
         <p className="text-red-500 mb-4">No Address Found</p>
@@ -89,10 +103,19 @@ function OrderFullFill() {
         ) : (
           <ul className="space-y-2">
             {cartItems.map((item) => (
-              <li key={item._id} className="flex justify-between items-center border-b py-2">
+              <li
+                key={item._id}
+                className="flex justify-between items-center border-b py-2"
+              >
                 <div className="flex items-center gap-2">
-                  <img src={item.product.imageUrl} alt={item.product.title} className="w-12 h-12 object-cover rounded" />
-                  <span>{item.product.title} x {item.quantity}</span>
+                  <img
+                    src={item.product.imageUrl}
+                    alt={item.product.title}
+                    className="w-12 h-12 object-cover rounded"
+                  />
+                  <span>
+                    {item.product.title} x {item.quantity}
+                  </span>
                 </div>
                 <span>${item.product.price * item.quantity}</span>
               </li>
@@ -102,10 +125,16 @@ function OrderFullFill() {
       </div>
 
       <div className="flex gap-3 mt-5">
-        <button onClick={() => createOrder("COD")} className="bg-green-500 text-white font-semibold px-6 py-3 rounded-lg">
+        <button
+          onClick={() => createOrder("COD")}
+          className="bg-green-500 text-white font-semibold px-6 py-3 rounded-lg"
+        >
           Cash on Delivery
         </button>
-        <button onClick={() => createOrder("Online")} className="bg-blue-600 text-white font-semibold px-6 py-3 rounded-lg">
+        <button
+          onClick={() => createOrder("Online")}
+          className="bg-blue-600 text-white font-semibold px-6 py-3 rounded-lg"
+        >
           Pay Now
         </button>
       </div>
