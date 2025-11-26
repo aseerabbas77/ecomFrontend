@@ -3,4 +3,9 @@
 @tailwind utilities;
 
 
-@import "tailwindcss";
+.carousel .legend {
+  opacity: 1 !important;
+  transition: none !important;
+  background: rgb(22, 9, 9) !important;
+  
+}
