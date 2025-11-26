@@ -60,7 +60,7 @@ const ProductList = () => {
   return (
     <div className="bg-gray-50 min-h-screen flex flex-col">
       {/* Carousel */}
-      <div className="w-full max-w-7xl mx-auto mt-4 rounded-lg overflow-hidden shadow-lg mb-8">
+      <div className="w-full max-w-7xl mx-auto mt-4  overflow-hidden shadow-lg mb-8">
         <Carousel
           showArrows
           showThumbs={false}
