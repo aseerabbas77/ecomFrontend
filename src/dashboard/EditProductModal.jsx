@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { showErrorToast } from "../utils/Toaster";
+import axiosInstance from "../api/axiosInstance";
 
 const EditProductModal = ({ product, token, onClose, onUpdateSuccess }) => {
   // Form ki state (initial values product prop se aayengi)
@@ -55,8 +56,7 @@ const EditProductModal = ({ product, token, onClose, onUpdateSuccess }) => {
 
     try {
       // Backend par PUT request bhejein
-      await axios.put(
-        `http://localhost:5000/api/products/${product._id}`,
+      await axiosInstance.put(`/products/${product._id}`,
         data,
         {
           headers: {
